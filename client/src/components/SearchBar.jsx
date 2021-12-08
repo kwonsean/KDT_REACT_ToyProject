@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Input, Row, Button, ListGroup, ListGroupItem } from 'reactstrap'
 import axios from 'axios'
 import styles from './SearchBar.module.css'
@@ -6,15 +6,24 @@ import styles from './SearchBar.module.css'
 export default function SearchBar() {
   const [data, setData] = useState([])
   const [text, setText] = useState('')
+  const [selectedText, setSelectedText] = useState('')
 
   const handleChange = (e) => {
     setText(e.target.value)
-    search(e.target.value)
   }
 
-  function search(searchText) {
+  useEffect(() => {
+    search()
+  }, [text])
+
+  useEffect(() => {
+    if (selectedText === '') return
+    chose()
+  }, [selectedText])
+
+  function search() {
     axios
-      .get(`/shopping?type=search&text=${searchText}`)
+      .get(`/shopping?type=search&text=${text}`)
       .then((response) => {
         setData(response.data)
         console.log('data', data)
@@ -24,11 +33,22 @@ export default function SearchBar() {
       })
   }
 
+  function chose() {
+    axios
+      .get(`/shopping?type=chose&selectedText=${selectedText}`)
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   const handleClick = (e) => {
-    console.log(e.target.innerText)
+    setSelectedText(e.target.innerText)
   }
   const btnClick = () => {
-    console.log(text)
+    setSelectedText(text)
   }
 
   return (
