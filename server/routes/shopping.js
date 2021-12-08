@@ -11,7 +11,7 @@ router.use(express.json())
 router.get('/', (req, res, next) => {
   const type = req.query.type
   const text = req.query.text
-  console.log(text)
+  // console.log(text)
   if ('search' === type) {
     var api_url =
       'https://mac.search.naver.com/mobile/ac?_q_enc=UTF-8&st=1&frm=mobile_nv&r_format=json&r_enc=UTF-8&r_unicode=0&t_koreng=1&ans=1&run=2&rev=4&q=' +
@@ -28,8 +28,10 @@ router.get('/', (req, res, next) => {
         const list = data['items']
           .flat()
           .flat()
-          .filter((item) => item !== '0')
-        console.log(list)
+          .filter((item, index) => index % 2 === 0)
+        // console.log(list)
+        console.log(data)
+        console.log(data['items'])
         res.send(list)
         // console.log(typeof body)
         // console.log(typeof response)
