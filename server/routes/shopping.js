@@ -1,20 +1,47 @@
-const API = require('../api.js')
-const { CLIENT_ID, CLIENT_SECRET } = API
+const KEY = require('../config/key.json')
+const { CLIENT_ID, CLIENT_SECRET } = KEY
 
-console.log(CLIENT_ID, CLIENT_SECRET)
-const request = require('request')
-request(
-  'https://mac.search.naver.com/mobile/ac?_q_enc=UTF-8&st=1&frm=mobile_nv&r_format=json&r_enc=UTF-8&r_unicode=0&t_koreng=1&ans=1&run=2&rev=4&q=' +
-    encodeURI('아이언맨'),
-  function (error, response, body) {
-    // console.error('error:', error) // Print the error if one occurred
-    console.log('statusCode:', response && response.statusCode) // Print the response status code if a response was received
-    // console.log('body:', body) // Print the HTML for the Google homepage.
-    console.log(response.body)
-    console.log(response)
+const express = require('express')
+const router = express.Router()
+const bodyParser = require('body-parser')
+
+router.use(bodyParser.urlencoded({ extended: true }))
+router.use(express.json())
+
+router.get('/', (req, res, next) => {
+  const type = req.query.type
+  const text = req.query.text
+  console.log(text)
+  if ('search' === type) {
+    var api_url =
+      'https://mac.search.naver.com/mobile/ac?_q_enc=UTF-8&st=1&frm=mobile_nv&r_format=json&r_enc=UTF-8&r_unicode=0&t_koreng=1&ans=1&run=2&rev=4&q=' +
+      encodeURI(text)
+    console.log(api_url)
+
+    const request = require('request')
+    let options = {
+      url: api_url,
+    }
+    request.get(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        const data = JSON.parse(body)
+        const list = data['items']
+          .flat()
+          .flat()
+          .filter((item) => item !== '0')
+        console.log(list)
+        res.send(list)
+        // console.log(typeof body)
+        // console.log(typeof response)
+      } else {
+        res.status(response.statusCode).end()
+        console.log('error = ' + response.statusCode)
+      }
+    })
   }
-)
+})
 
+module.exports = router
 // var express = require('express')
 // var app = express()
 // var client_id = CLIENT_ID
