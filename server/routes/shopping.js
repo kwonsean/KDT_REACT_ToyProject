@@ -10,13 +10,12 @@ router.use(express.json())
 
 router.get('/', (req, res, next) => {
   const type = req.query.type
-  const text = req.query.text
-  // console.log(text)
   if ('search' === type) {
+    const text = req.query.text
     var api_url =
       'https://mac.search.naver.com/mobile/ac?_q_enc=UTF-8&st=1&frm=mobile_nv&r_format=json&r_enc=UTF-8&r_unicode=0&t_koreng=1&ans=1&run=2&rev=4&q=' +
       encodeURI(text)
-    console.log(api_url)
+    // console.log(api_url)
 
     const request = require('request')
     let options = {
@@ -30,11 +29,40 @@ router.get('/', (req, res, next) => {
           .flat()
           .filter((item, index) => index % 2 === 0)
         // console.log(list)
-        console.log(data)
-        console.log(data['items'])
+        // console.log(data)
+        // console.log(data['items'])
         res.send(list)
         // console.log(typeof body)
         // console.log(typeof response)
+      } else {
+        res.status(response.statusCode).end()
+        console.log('error = ' + response.statusCode)
+      }
+    })
+  } else if ('chose' === type) {
+    const selectedText = req.query.selectedText
+    // console.log(selectedText)
+    var api_url =
+      'https://openapi.naver.com/v1/search/shop.json?query=' +
+      encodeURI(selectedText)
+    // console.log(api_url)
+
+    const request = require('request')
+    let options = {
+      url: api_url,
+      headers: {
+        'X-Naver-Client-Id': CLIENT_ID,
+        'X-Naver-Client-Secret': CLIENT_SECRET,
+      },
+    }
+    request.get(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        const data = JSON.parse(body)
+        const list = data['items']
+        // console.log(list)
+        // console.log(data)
+        // console.log(data['items'])
+        res.send(list)
       } else {
         res.status(response.statusCode).end()
         console.log('error = ' + response.statusCode)
@@ -44,6 +72,7 @@ router.get('/', (req, res, next) => {
 })
 
 module.exports = router
+
 // var express = require('express')
 // var app = express()
 // var client_id = CLIENT_ID
