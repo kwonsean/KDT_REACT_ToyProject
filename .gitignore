@@ -25,6 +25,4 @@
 
 /test/*.js
 
-/server/.env
-/server/api.js
-/server/env.js
+/server/config
