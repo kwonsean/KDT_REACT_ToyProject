@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Col, Input, Row, Button } from 'reactstrap'
+import { Col, Input, Row, Button, ListGroup, ListGroupItem } from 'reactstrap'
 import axios from 'axios'
+import styles from './SearchBar.module.css'
 
 export default function SearchBar() {
   const [data, setData] = useState([])
@@ -10,6 +11,7 @@ export default function SearchBar() {
     setText(e.target.value)
     search(e.target.value)
   }
+
   function search(searchText) {
     axios
       .get(`/shopping?type=search&text=${searchText}`)
@@ -21,19 +23,38 @@ export default function SearchBar() {
         console.log(error)
       })
   }
+
+  const handleClick = (e) => {
+    console.log(e.target.innerText)
+  }
+  const btnClick = () => {
+    console.log(text)
+  }
+
   return (
     <Row>
       <Col xs='2'></Col>
       <Col xs='6'>
         <Input value={text} onChange={handleChange} />
-        <ul>
+        <ListGroup>
           {data.map((item, index) => {
-            return <li key={index}>🔍{item}</li>
+            return (
+              <ListGroupItem
+                action
+                tag='button'
+                onClick={handleClick}
+                className={styles.list}
+                key={index}
+                style={{ listStyle: 'none' }}
+              >
+                {item}
+              </ListGroupItem>
+            )
           })}
-        </ul>
+        </ListGroup>
       </Col>
       <Col xs='2'>
-        <Button>검색</Button>
+        <Button onClick={btnClick}>검색</Button>
       </Col>
       <Col xs='2'></Col>
     </Row>

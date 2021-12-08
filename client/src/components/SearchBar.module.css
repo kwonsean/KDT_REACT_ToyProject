@@ -1,0 +1,5 @@
+.list::before {
+  content: '🔍';
+  margin-right: 7px;
+  margin-left: -7px;
+}
