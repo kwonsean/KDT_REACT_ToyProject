@@ -2,6 +2,7 @@
 
 # dependencies
 /client/node_modules
+/server/node_modules
 /client/.pnp
 /client.pnp.js
 
@@ -23,3 +24,7 @@
 /client/yarn-error.log*
 
 /test/*.js
+
+/server/.env
+/server/api.js
+/server/env.js
