@@ -60,7 +60,7 @@ export default function SearchBar({ setSearchList }) {
   return (
     <>
       <Row>
-        <Col xs='2'></Col>
+        <Col xs='3'></Col>
         <Col xs='6'>
           <Input value={text} onChange={handleChange} />
           <ListGroup>
@@ -80,12 +80,16 @@ export default function SearchBar({ setSearchList }) {
             })}
           </ListGroup>
         </Col>
-        <Col xs='2'>
+        <Col xs='1'>
           <Button onClick={btnClick}>검색</Button>
         </Col>
         <Col xs='2'></Col>
       </Row>
-      {isSearched ? <div>{selectedText}에 대한 검색 결과입니다.</div> : null}
+      {isSearched ? (
+        <div className={styles.result}>
+          <strong>{selectedText}</strong>에 대한 검색 결과입니다.
+        </div>
+      ) : null}
     </>
   )
 }

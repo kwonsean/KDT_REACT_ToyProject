@@ -3,3 +3,8 @@
   margin-right: 7px;
   margin-left: -7px;
 }
+
+.result {
+  text-align: center;
+  margin: 20px 0 40px;
+}
