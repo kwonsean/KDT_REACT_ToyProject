@@ -1,10 +1,19 @@
 import React from 'react'
 import { Button, Col, Row } from 'reactstrap'
 import styled from './ShoppingList.module.css'
+import axios from 'axios'
 console.log(styled)
 
 export default function ShoppingList({ searchList }) {
   console.log('this is sp', searchList)
+  const clickBuyBtn = () => {
+    axios
+      .post('/shopping?type=insert')
+      .then((response) => console.log('hi', response))
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 
   return (
     <div>
@@ -41,7 +50,7 @@ export default function ShoppingList({ searchList }) {
                 <span>{item.mallName}</span>
               </Col>
               <Col xs='1'>
-                <Button>구매</Button>
+                <Button onClick={clickBuyBtn}>구매</Button>
               </Col>
             </Row>
           )
