@@ -1,20 +1,26 @@
 import React from 'react'
 import { Button, Col, Row } from 'reactstrap'
+import styled from './ShoppingList.module.css'
+console.log(styled)
 
 export default function ShoppingList({ searchList }) {
   console.log('this is sp', searchList)
 
   return (
-    <ul>
+    <div>
       {searchList.length > 0 &&
         searchList.map((item) => {
+          const htmlTitle = item.title
           return (
-            <Row style={{ textAlign: 'center' }} key={item.productId}>
+            <Row className={styled.row} key={item.productId}>
               <Col xs='1'>
                 <img alt='item' src={item.image} width='100%' />
               </Col>
               <Col xs='6'>
-                <h5>{item.title}</h5>
+                <h5
+                  dangerouslySetInnerHTML={{ __html: htmlTitle }}
+                  className={styled.title}
+                ></h5>
               </Col>
               <Col xs='2'>
                 <span>
@@ -30,6 +36,6 @@ export default function ShoppingList({ searchList }) {
             </Row>
           )
         })}
-    </ul>
+    </div>
   )
 }

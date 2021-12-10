@@ -1,0 +1,20 @@
+.row {
+  margin-bottom: 18px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgb(211, 211, 211);
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.row:hover {
+  background-color: aliceblue;
+}
+
+.col {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.title {
+  font-size: 16px;
+}
