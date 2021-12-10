@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NaverShoppingMapper">  
+  <select id="insertList">
+    SELECT *
+    FROM react.product_naver
+  </select>
+<!-- 
+  <insert id="insertBoard">
+    INSERT INTO react.board
+    (id, title, content, insert_user, insert_date)
+    VALUES(concat(DATE_FORMAT(now(), '%Y%m%d'),'ORDER',lpad(nextval('BOARD'),5,0),FLOOR(RAND() * 100))
+    , #{title}, #{content}, #{insert_user}, now());
+  </insert>
+
+  <update id='updateBoard'> 
+    update react.board 
+    set title = #{title},
+        content  = #{content}
+    where id = #{id}
+  </update>
+
+  <delete id="deleteBoard">
+    delete from react.board 
+    WHERE id = #{id}
+  </delete> -->
+  
+</mapper>
