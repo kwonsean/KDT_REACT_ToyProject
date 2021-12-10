@@ -27,7 +27,7 @@ export default function SearchBar({ setSearchList }) {
 
   function search() {
     axios
-      .get(`/shopping?type=search&text=${text}`)
+      .post(`/shopping?type=search&text=${text}`)
       .then((response) => {
         setData(response.data)
         // console.log('data', data)
@@ -39,7 +39,7 @@ export default function SearchBar({ setSearchList }) {
 
   function chose() {
     axios
-      .get(`/shopping?type=chose&selectedText=${selectedText}`)
+      .post(`/shopping?type=chose&selectedText=${selectedText}`)
       .then((response) => {
         console.log('최초의 것', response.data)
         setSearchList(response.data)

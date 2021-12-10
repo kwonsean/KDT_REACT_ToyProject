@@ -8,8 +8,9 @@ const bodyParser = require('body-parser')
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(express.json())
 
-router.get('/', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const type = req.query.type
+  console.log(type)
   if ('search' === type) {
     const text = req.query.text
     var api_url =
@@ -68,11 +69,22 @@ router.get('/', (req, res, next) => {
         console.log('error = ' + response.statusCode)
       }
     })
+  } else if ('insert' === type) {
+    const dbconnect_Module = require('./dbconnect_module')
+
+    // mybaits
+    req.body.mapper = 'NaverShoppingMapper' // 파일명 정의
+    req.body.crud = 'select' // select, insert, update, delete 중 하나 작성
+    req.body.mapper_id = 'insertList'
+
+    router.use('/', dbconnect_Module)
+    next('route')
   }
 })
 
 module.exports = router
 
+// 네이버 문서 내용
 // var express = require('express')
 // var app = express()
 // var client_id = CLIENT_ID
