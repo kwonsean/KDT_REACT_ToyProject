@@ -8,6 +8,16 @@ export default function ShoppingList({ searchList }) {
 
   return (
     <div>
+      {searchList.length > 0 && (
+        <Row className={styled.rowTitle}>
+          <Col xl='1'>상품이미지</Col>
+          <Col xs='6'>상품 명</Col>
+          <Col xs='2'>최저가</Col>
+          <Col xs='2'>판매처</Col>
+          <Col xs='1'>구매</Col>
+        </Row>
+      )}
+
       {searchList.length > 0 &&
         searchList.map((item) => {
           const htmlTitle = item.title

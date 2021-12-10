@@ -1,3 +1,13 @@
+.rowTitle {
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgb(100, 100, 100);
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
 .row {
   margin-bottom: 18px;
   padding-bottom: 2px;
@@ -8,11 +18,6 @@
 }
 .row:hover {
   background-color: aliceblue;
-}
-
-.col {
-  display: inline-block;
-  vertical-align: middle;
 }
 
 .title {
