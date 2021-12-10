@@ -6,10 +6,34 @@ console.log(styled)
 
 export default function ShoppingList({ searchList }) {
   console.log('this is sp', searchList)
-  const clickBuyBtn = () => {
+  // 구매 버튼 클릭시 그 상품에 대한 정보 객체 매개변수로 받음
+  const clickBuyBtn = (item) => {
     axios
-      .post('/shopping?type=insert')
-      .then((response) => console.log('hi', response))
+      .post('/shopping?type=select')
+      .then((response) => {
+        const { data } = response.data
+        return data
+      }) // DB에 있는 전체 자료를 돌면서 id가 겹치는지 체크
+      .then((datas) => {
+        let isOnDB = false
+        datas.forEach((data) => {
+          if (data.productId === item.productId) {
+            isOnDB = true
+          }
+        }) // 아이디가 겹치면 update실행
+        if (isOnDB) {
+          console.log('is on DB', item)
+          axios.post(`/shopping?type=updateDB`, {
+            item,
+          })
+        } else {
+          // 아이디가 없으면 insert실행
+          console.log('is new!', item)
+          axios.post(`/shopping?type=insert`, {
+            item,
+          })
+        }
+      })
       .catch((error) => {
         console.log(error)
       })
@@ -50,7 +74,7 @@ export default function ShoppingList({ searchList }) {
                 <span>{item.mallName}</span>
               </Col>
               <Col xs='1'>
-                <Button onClick={clickBuyBtn}>구매</Button>
+                <Button onClick={() => clickBuyBtn(item)}>구매</Button>
               </Col>
             </Row>
           )
