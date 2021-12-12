@@ -6,37 +6,15 @@
     FROM react.product_naver
   </select>
 
-  <update id='updateDB'>
-    UPDATE react.product_naver
-    SET buyCount=#{item.buyCount} + 1, updateDate=NOW()
-    WHERE productId=#{item.productId};
-  <update>
-
-  <insert id="insertItem">
+  <insert id='buyItem'>
     INSERT INTO react.product_naver
     (productId, title, image, category1, category2, category3, category4, buyCount, insertDate, updateDate)
-    VALUES(#{item.productId}, #{item.title}, #{item.image}, #{item.category1}, #{item.category2}, #{item.category3}, #{item.category4}, 1, now(), now());
+    VALUES(#{item.productId}, #{item.title}, #{item.image}, #{item.category1}, #{item.category2}, #{item.category3}, #{item.category4}, 1, now(), now())
+    ON DUPLICATE KEY UPDATE
+    buyCount = buyCount + 1,
+    updateDate = NOW()
   </insert>
 
 </mapper>
 
-<!-- 
-  <insert id="insertBoard">
-    INSERT INTO react.board
-    (id, title, content, insert_user, insert_date)
-    VALUES(concat(DATE_FORMAT(now(), '%Y%m%d'),'ORDER',lpad(nextval('BOARD'),5,0),FLOOR(RAND() * 100))
-    , #{title}, #{content}, #{insert_user}, now());
-  </insert>
 
-  <update id='updateBoard'> 
-    update react.board 
-    set title = #{title},
-        content  = #{content}
-    where id = #{id}
-  </update>
-
-  <delete id="deleteBoard">
-    delete from react.board 
-    WHERE id = #{id}
-  </delete> -->
-  
