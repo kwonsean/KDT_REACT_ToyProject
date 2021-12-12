@@ -2,7 +2,6 @@ import React from 'react'
 import { Button, Col, Row } from 'reactstrap'
 import styled from './ShoppingList.module.css'
 import axios from 'axios'
-console.log(styled)
 
 export default function ShoppingList({ searchList }) {
   console.log('this is sp', searchList)
