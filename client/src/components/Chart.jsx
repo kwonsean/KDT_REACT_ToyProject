@@ -1,6 +1,9 @@
 import axios from 'axios'
 import React, { useCallback, useEffect, useState } from 'react'
+import { Col, Row } from 'reactstrap'
 import { PieChart, Pie, Sector, Cell } from 'recharts'
+import styled from './ShoppingList.module.css'
+import BuyList from './BuyList'
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180
@@ -85,11 +88,14 @@ const renderActiveShape = (props) => {
 export default function Chart() {
   const [data, setData] = useState([])
   useEffect(() => {
-    axios.post('/shopping?type=selectCategoryCount').then((response) => {
-      const { data } = response.data
-      console.log(data)
-      setData(data)
-    })
+    axios
+      .post('/shopping?type=selectCategoryCount')
+      .then((response) => {
+        const { data } = response.data
+        console.log(data)
+        setData(data)
+      })
+      .catch((error) => console.log(error))
   }, [])
 
   // const data = [
@@ -119,8 +125,20 @@ export default function Chart() {
     [setActiveIndex]
   )
 
+  const [itemDetail, setItemDetail] = useState([])
+
   const onClickPie = (e) => {
-    console.log(e.name)
+    const name = e.name
+    axios
+      .post('/shopping?type=selectCategoryDetail', {
+        name,
+      })
+      .then((response) => {
+        const { data } = response.data
+        console.log(data)
+        setItemDetail(data)
+      })
+      .catch((error) => console.log(error))
   }
 
   return (
@@ -145,6 +163,25 @@ export default function Chart() {
           ))}
         </Pie>
       </PieChart>
+      {itemDetail.length > 0 ? (
+        <div>
+          <Row className={styled.row}>
+            <Col xs='1'>순번</Col>
+            <Col xs='1'>이미지</Col>
+            <Col xs='8'>상품 명</Col>
+
+            <Col xs='2'>구매 건수</Col>
+          </Row>
+          {itemDetail.map((item, index) => (
+            <BuyList item={item} key={item.productId} index={index} />
+          ))}
+          <span>{`구매한 물품은 ${
+            itemDetail.length
+          }개이고 총 구매 물품 갯수는 ${itemDetail
+            .map((item) => item.buyCount)
+            .reduce((a, b) => a + b)}`}</span>
+        </div>
+      ) : null}
     </div>
   )
 }
