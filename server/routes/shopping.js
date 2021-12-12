@@ -69,13 +69,23 @@ router.post('/', (req, res, next) => {
         console.log('error = ' + response.statusCode)
       }
     })
-  } else if ('select' === type) {
+  } else if ('selectAllDB' === type) {
     const dbconnect_Module = require('./dbconnect_module')
 
     // mybaits
     req.body.mapper = 'NaverShoppingMapper' // 파일명 정의
     req.body.crud = 'select' // select, insert, update, delete 중 하나 작성
-    req.body.mapper_id = 'selectAllList'
+    req.body.mapper_id = 'selectAllDB'
+
+    router.use('/', dbconnect_Module)
+    next('route')
+  } else if ('selectCategoryCount' === type) {
+    const dbconnect_Module = require('./dbconnect_module')
+
+    // mybaits
+    req.body.mapper = 'NaverShoppingMapper' // 파일명 정의
+    req.body.crud = 'select' // select, insert, update, delete 중 하나 작성
+    req.body.mapper_id = 'selectCategoryCount'
 
     router.use('/', dbconnect_Module)
     next('route')

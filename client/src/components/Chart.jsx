@@ -1,13 +1,6 @@
-import React, { useCallback, useState } from 'react'
+import axios from 'axios'
+import React, { useCallback, useEffect, useState } from 'react'
 import { PieChart, Pie, Sector, Cell } from 'recharts'
-
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-]
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180
@@ -36,7 +29,14 @@ const renderActiveShape = (props) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor='middle' fill={fill}>
+      <text
+        x={cx}
+        y={cy}
+        dy={8}
+        textAnchor='middle'
+        fill={fill}
+        style={{ fontSize: 30 }}
+      >
         {payload.name}
       </text>
       <Sector
@@ -68,7 +68,7 @@ const renderActiveShape = (props) => {
         y={ey}
         textAnchor={textAnchor}
         fill='#333'
-      >{`PV ${value}`}</text>
+      >{`총 구매 건 ${value}건`}</text>
       <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
@@ -76,33 +76,57 @@ const renderActiveShape = (props) => {
         textAnchor={textAnchor}
         fill='#999'
       >
-        {`(Rate ${(percent * 100).toFixed(2)}%)`}
+        {`(구매 비율 ${(percent * 100).toFixed(2)}%)`}
       </text>
     </g>
   )
 }
 
 export default function Chart() {
-  const data = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
+  const [data, setData] = useState([])
+  useEffect(() => {
+    axios.post('/shopping?type=selectCategoryCount').then((response) => {
+      const { data } = response.data
+      console.log(data)
+      setData(data)
+    })
+  }, [])
+
+  // const data = [
+  //   { name: 'Group A', value: 400 },
+  //   { name: 'Group B', value: 300 },
+  //   { name: 'Group C', value: 300 },
+  //   { name: 'Group D', value: 200 },
+  // ]
+  const COLORS = [
+    '#FF4848',
+    '#FF8042',
+    '#FFBB28',
+    '#00C49F',
+    '#0088FE',
+    '#1037FF',
+    '#DB9FFF',
+    '#E0C5AD',
+    '#F6E785',
+    '#F59E90',
   ]
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
   const [activeIndex, setActiveIndex] = useState(0)
+
   const onPieEnter = useCallback(
     (_, index) => {
       setActiveIndex(index)
     },
     [setActiveIndex]
   )
-  const demoUrl =
-    'https://codesandbox.io/s/pie-chart-with-customized-active-shape-y93si'
+
+  const onClickPie = (e) => {
+    console.log(e.name)
+  }
 
   return (
     <div>
-      <PieChart width={1000} height={540} style={{ border: `1px solid red` }}>
+      <h2 style={{ textAlign: 'center', minWidth: 1000 }}>구매 비율 차트</h2>
+      <PieChart width={1000} height={540} style={{ margin: `0 auto` }}>
         <Pie
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
@@ -114,6 +138,7 @@ export default function Chart() {
           fill='#8884d8'
           dataKey='value'
           onMouseEnter={onPieEnter}
+          onClick={onClickPie}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
