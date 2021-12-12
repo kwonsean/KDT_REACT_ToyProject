@@ -12,6 +12,12 @@
     GROUP BY category1
   </select>
 
+  <select id="selectCategoryDetail">
+    SELECT *
+    FROM react.product_naver
+    WHERE category1 = #{name}
+  </select>
+
   <insert id='buyItem'>
     INSERT INTO react.product_naver
     (productId, title, image, category1, category2, category3, category4, buyCount, insertDate, updateDate)
