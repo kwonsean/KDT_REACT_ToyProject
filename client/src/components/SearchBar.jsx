@@ -18,13 +18,11 @@ export default function SearchBar({ setSearchList, searchList }) {
   현재 구매목록페이지로 이동했다 다시 돌아오면 검색 내용은 남아있는데 
   ~에 대한 검색결과 입니다는 사라짐 그래서 searchList상태를 보고 true로 해줬더니 ~가 사라져서 안보임
   이는 selectedText를 app.js에서 관리하면 가능할듯 하지만 이방법은 너무 억지스러워서 일단 좀 더 고민
-  차라리 searchList를 비우는게 나을지도 
+  차라리 searchList를 비우는게 나을지도 -> 우선 이 방법을 선택
   */
-  // useEffect(() => {
-  //   if (searchList.length > 0) {
-  //     setIsSearched(true)
-  //   }
-  // }, [])
+  useEffect(() => {
+    setSearchList([])
+  }, [])
 
   useEffect(() => {
     search()
@@ -74,7 +72,11 @@ export default function SearchBar({ setSearchList, searchList }) {
       <Row>
         <Col xs='3'></Col>
         <Col xs='6'>
-          <Input value={text} onChange={handleChange} />
+          <Input
+            value={text}
+            onChange={handleChange}
+            placeholder='구매하실 상품을 검색해보세요!'
+          />
           <ListGroup>
             {data.map((item, index) => {
               return (
@@ -97,11 +99,15 @@ export default function SearchBar({ setSearchList, searchList }) {
         </Col>
         <Col xs='2'></Col>
       </Row>
-      {isSearched ? (
+      {!isSearched ? null : searchList.length === 0 ? (
         <div className={styles.result}>
-          <strong>{selectedText}</strong>에 대한 검색 결과입니다.
+          <strong>{selectedText}</strong>에 대한 상품 검색 결과가 없습니다.
         </div>
-      ) : null}
+      ) : (
+        <div className={styles.result}>
+          <strong>{selectedText}</strong>에 대한 상품 검색 결과입니다.
+        </div>
+      )}
     </>
   )
 }

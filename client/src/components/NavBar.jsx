@@ -11,7 +11,7 @@ export default function NavBar({ isSearchPage, setIsSearchPage }) {
   }
   return (
     <div>
-      <Nav pills>
+      <Nav pills style={{ cursor: 'pointer' }}>
         <NavItem>
           <NavLink active={isSearchPage} onClick={navClick}>
             상품 검색 & 구매

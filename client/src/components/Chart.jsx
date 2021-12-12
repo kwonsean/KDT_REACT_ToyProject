@@ -50,6 +50,7 @@ const renderActiveShape = (props) => {
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
+        style={{ cursor: 'pointer' }}
       />
       <Sector
         cx={cx}
@@ -144,7 +145,7 @@ export default function Chart() {
   return (
     <div>
       <h2 style={{ textAlign: 'center', minWidth: 1000 }}>구매 비율 차트</h2>
-      <PieChart width={1000} height={540} style={{ margin: `0 auto` }}>
+      <PieChart width={1000} height={570} style={{ margin: `0 auto` }}>
         <Pie
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
@@ -165,7 +166,7 @@ export default function Chart() {
       </PieChart>
       {itemDetail.length > 0 ? (
         <div>
-          <Row className={styled.row}>
+          <Row className={styled.rowTitle}>
             <Col xs='1'>순번</Col>
             <Col xs='1'>이미지</Col>
             <Col xs='8'>상품 명</Col>
@@ -175,11 +176,18 @@ export default function Chart() {
           {itemDetail.map((item, index) => (
             <BuyList item={item} key={item.productId} index={index} />
           ))}
-          <span>{`구매한 물품은 ${
+          <div
+            style={{
+              textAlign: 'right',
+              fontSize: 20,
+              marginBottom: 40,
+              fontWeight: 700,
+            }}
+          >{`${itemDetail[0].category1} 카테고리에서 구매한 물품 종류는 ${
             itemDetail.length
           }개이고 총 구매 물품 갯수는 ${itemDetail
             .map((item) => item.buyCount)
-            .reduce((a, b) => a + b)}`}</span>
+            .reduce((a, b) => a + b)}개 입니다.`}</div>
         </div>
       ) : null}
     </div>
