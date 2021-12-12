@@ -1,17 +1,25 @@
 import { useEffect, useState } from 'react'
 import { Container } from 'reactstrap'
+import Chart from './components/Chart'
+import NavBar from './components/NavBar'
 import SearchBar from './components/SearchBar'
 import ShoppingList from './components/ShoppingList'
 
 function App() {
   const [searchList, setSearchList] = useState([])
-  useEffect(() => {
-    console.log('this is in App', searchList)
-  }, [searchList])
+  const [isSearchPage, setIsSearchPage] = useState(true)
+  useEffect(() => {}, [searchList])
   return (
     <Container style={{ marginTop: 40 }}>
-      <SearchBar setSearchList={setSearchList} />
-      <ShoppingList searchList={searchList} />
+      <NavBar isSearchPage={isSearchPage} setIsSearchPage={setIsSearchPage} />
+      {isSearchPage ? (
+        <>
+          <SearchBar setSearchList={setSearchList} searchList={searchList} />
+          <ShoppingList searchList={searchList} />
+        </>
+      ) : (
+        <Chart />
+      )}
     </Container>
   )
 }

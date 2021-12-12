@@ -3,7 +3,7 @@ import { Col, Input, Row, Button, ListGroup, ListGroupItem } from 'reactstrap'
 import axios from 'axios'
 import styles from './SearchBar.module.css'
 
-export default function SearchBar({ setSearchList }) {
+export default function SearchBar({ setSearchList, searchList }) {
   const [data, setData] = useState([])
   const [text, setText] = useState('')
   const [selectedText, setSelectedText] = useState('')
@@ -12,6 +12,19 @@ export default function SearchBar({ setSearchList }) {
   const handleChange = (e) => {
     setText(e.target.value)
   }
+
+  /* 
+  TODO 
+  현재 구매목록페이지로 이동했다 다시 돌아오면 검색 내용은 남아있는데 
+  ~에 대한 검색결과 입니다는 사라짐 그래서 searchList상태를 보고 true로 해줬더니 ~가 사라져서 안보임
+  이는 selectedText를 app.js에서 관리하면 가능할듯 하지만 이방법은 너무 억지스러워서 일단 좀 더 고민
+  차라리 searchList를 비우는게 나을지도 
+  */
+  // useEffect(() => {
+  //   if (searchList.length > 0) {
+  //     setIsSearched(true)
+  //   }
+  // }, [])
 
   useEffect(() => {
     search()
@@ -41,7 +54,6 @@ export default function SearchBar({ setSearchList }) {
     axios
       .post(`/shopping?type=chose&selectedText=${selectedText}`)
       .then((response) => {
-        console.log('최초의 것', response.data)
         setSearchList(response.data)
         setIsSearched(true)
       })
