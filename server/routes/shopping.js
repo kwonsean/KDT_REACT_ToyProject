@@ -41,11 +41,14 @@ router.post('/', (req, res, next) => {
       }
     })
   } else if ('chose' === type) {
-    const selectedText = req.query.selectedText
+    const selectedText = req.body.selectedText
+    const page = req.body.page
+    // console.log(page)
     // console.log(selectedText)
     var api_url =
       'https://openapi.naver.com/v1/search/shop.json?query=' +
-      encodeURI(selectedText)
+      encodeURI(selectedText) +
+      `&start=${10 * page}`
     // console.log(api_url)
 
     const request = require('request')
@@ -60,10 +63,14 @@ router.post('/', (req, res, next) => {
       if (!error && response.statusCode == 200) {
         const data = JSON.parse(body)
         const list = data['items']
+        const sendData = {
+          total: data.total,
+          itemList: list,
+        }
         // console.log(list)
         // console.log(data)
         // console.log(data['items'])
-        res.send(list)
+        res.send(sendData)
       } else {
         res.status(response.statusCode).end()
         console.log('error = ' + response.statusCode)
