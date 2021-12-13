@@ -2,8 +2,13 @@ import React from 'react'
 import { Button, Col, Row } from 'reactstrap'
 import styled from './ShoppingList.module.css'
 import axios from 'axios'
+import PaginationComponent from './PaginationComponent'
 
-export default function ShoppingList({ searchList }) {
+export default function ShoppingList({
+  setSearchList,
+  searchList,
+  searchedText,
+}) {
   console.log('this is sp', searchList)
   // 구매 버튼 클릭시 그 상품에 대한 정보 객체 매개변수로 받음
   const clickBuyBtn = (item) => {
@@ -59,6 +64,12 @@ export default function ShoppingList({ searchList }) {
             </Row>
           )
         })}
+      {searchList.length > 0 && (
+        <PaginationComponent
+          searchedText={searchedText}
+          setSearchList={setSearchList}
+        />
+      )}
     </div>
   )
 }
