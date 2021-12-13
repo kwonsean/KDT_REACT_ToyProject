@@ -48,7 +48,6 @@ export default function SearchBar({
       .post(`/shopping?type=search&text=${text}`)
       .then((response) => {
         setData(response.data)
-        // console.log('data', data)
       })
       .catch((error) => {
         console.log(error)
@@ -62,8 +61,10 @@ export default function SearchBar({
         page: 1,
       })
       .then((response) => {
-        setSearchList(response.data)
+        const { itemList, total } = response.data
+        setSearchList(itemList)
         setIsSearched(true)
+        console.log(total)
       })
       .catch((error) => {
         console.log(error)
