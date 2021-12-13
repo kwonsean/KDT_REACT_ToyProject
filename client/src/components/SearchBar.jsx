@@ -3,9 +3,14 @@ import { Col, Input, Row, Button, ListGroup, ListGroupItem } from 'reactstrap'
 import axios from 'axios'
 import styles from './SearchBar.module.css'
 
-export default function SearchBar({ setSearchList, searchList }) {
+export default function SearchBar({
+  setSearchList,
+  searchList,
+  setSearchedText,
+}) {
   const [data, setData] = useState([])
   const [text, setText] = useState('')
+  // TODO selectedText app.js로 올리는게 setSearchedText를 쓰는것보다 나아보임
   const [selectedText, setSelectedText] = useState('')
   const [isSearched, setIsSearched] = useState(false)
 
@@ -33,6 +38,8 @@ export default function SearchBar({ setSearchList, searchList }) {
     if (selectedText === '') return
     chose()
     setText('')
+    setSearchedText(selectedText)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedText])
 
@@ -50,7 +57,10 @@ export default function SearchBar({ setSearchList, searchList }) {
 
   function chose() {
     axios
-      .post(`/shopping?type=chose&selectedText=${selectedText}`)
+      .post('/shopping?type=chose', {
+        selectedText,
+        page: 1,
+      })
       .then((response) => {
         setSearchList(response.data)
         setIsSearched(true)
