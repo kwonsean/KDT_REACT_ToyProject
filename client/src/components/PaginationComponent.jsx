@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { PaginationItem, PaginationLink, Pagination } from 'reactstrap'
 import axios from 'axios'
 
-export default function PaginationComponent({ searchedText, setSearchList }) {
+export default function PaginationComponent({ selectedText, setSearchList }) {
   // TODO 자꾸 타이밍이 한박자 늦긴한데 이건 pagination에서 처리하려고 하니깐 발생하는 문제라고 생각
   // 이건 숫자를 눌러야 axios가 시작되기 때문에! 애초에 total은 초반에 searchBar에서 잡아서 가져와 사용하는게 맞을듯!
   const [totalItems, setTotalItems] = useState(1)
@@ -18,7 +18,7 @@ export default function PaginationComponent({ searchedText, setSearchList }) {
     console.log(e.target.value)
     axios
       .post('/shopping?type=chose', {
-        selectedText: searchedText,
+        selectedText: selectedText,
         page, // 1, 2, 3, 4, 5
       })
       .then((response) => {

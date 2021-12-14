@@ -7,9 +7,9 @@ import ShoppingList from './components/ShoppingList'
 
 function App() {
   const [searchList, setSearchList] = useState([])
-  const [searchedText, setSearchedText] = useState('')
+  const [selectedText, setSelectedText] = useState('')
   const [isSearchPage, setIsSearchPage] = useState(true)
-  useEffect(() => {}, [searchList])
+
   return (
     <Container style={{ marginTop: 40 }}>
       <NavBar isSearchPage={isSearchPage} setIsSearchPage={setIsSearchPage} />
@@ -18,12 +18,13 @@ function App() {
           <SearchBar
             setSearchList={setSearchList}
             searchList={searchList}
-            setSearchedText={setSearchedText}
+            selectedText={selectedText}
+            setSelectedText={setSelectedText}
           />
           <ShoppingList
             setSearchList={setSearchList}
             searchList={searchList}
-            searchedText={searchedText}
+            selectedText={selectedText}
           />
         </>
       ) : (

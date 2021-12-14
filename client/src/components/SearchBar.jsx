@@ -6,12 +6,11 @@ import styles from './SearchBar.module.css'
 export default function SearchBar({
   setSearchList,
   searchList,
-  setSearchedText,
+  selectedText,
+  setSelectedText,
 }) {
   const [data, setData] = useState([])
   const [text, setText] = useState('')
-  // TODO selectedText app.js로 올리는게 setSearchedText를 쓰는것보다 나아보임
-  const [selectedText, setSelectedText] = useState('')
   const [isSearched, setIsSearched] = useState(false)
 
   const handleChange = (e) => {
@@ -38,7 +37,6 @@ export default function SearchBar({
     if (selectedText === '') return
     chose()
     setText('')
-    setSearchedText(selectedText)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedText])

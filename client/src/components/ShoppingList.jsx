@@ -7,7 +7,7 @@ import PaginationComponent from './PaginationComponent'
 export default function ShoppingList({
   setSearchList,
   searchList,
-  searchedText,
+  selectedText,
 }) {
   console.log('this is sp', searchList)
   // 구매 버튼 클릭시 그 상품에 대한 정보 객체 매개변수로 받음
@@ -66,7 +66,7 @@ export default function ShoppingList({
         })}
       {searchList.length > 0 && (
         <PaginationComponent
-          searchedText={searchedText}
+          selectedText={selectedText}
           setSearchList={setSearchList}
         />
       )}
