@@ -7,17 +7,45 @@ export default function PaginationComponent({
   setSearchList,
   totalResults,
 }) {
+  // TODO 마지막 페이지 계산 및 표현, 끝페이지 이동 처리, 끞페이지시 next버튼 비활성화
+
   const endPage = Math.ceil(totalResults / 10)
   // console.log('endpage', endPage)
   const [page, setPage] = useState(1)
+  const [pagePoint, setPagePoint] = useState(0)
 
-  const paginationCLick = (e) => {
-    const page = e.target.value
-    console.log(e.target.value)
+  const clickFirstPage = () => {
+    setPagePoint(0)
+  }
+  const clickPrevPage = () => {
+    setPagePoint((cur) => cur - 5)
+  }
+  const clickNextPage = () => {
+    setPagePoint((cur) => cur + 5)
+  }
+
+  useEffect(() => {
     axios
       .post('/shopping?type=chose', {
         selectedText: selectedText,
-        page, // 1, 2, 3, 4, 5
+        page: pagePoint + 1, // 1, 2, 3, 4, 5
+      })
+      .then((response) => {
+        const { itemList } = response.data
+        setSearchList(itemList)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [pagePoint])
+
+  const paginationCLick = (e) => {
+    const value = e.target.value
+    console.log(e.target)
+    axios
+      .post('/shopping?type=chose', {
+        selectedText: selectedText,
+        page: value, // 1, 2, 3, 4, 5
       })
       .then((response) => {
         const { itemList } = response.data
@@ -30,40 +58,56 @@ export default function PaginationComponent({
   return (
     <Pagination style={{ width: 300, margin: '0 auto 40px' }}>
       <PaginationItem>
-        <PaginationLink first href='#' />
+        <PaginationLink
+          first
+          onClick={clickFirstPage}
+          disabled={pagePoint === 0 ? true : false}
+        />
       </PaginationItem>
       <PaginationItem>
-        <PaginationLink href='#' previous />
+        <PaginationLink
+          previous
+          onClick={clickPrevPage}
+          disabled={pagePoint === 0 ? true : false}
+        />
       </PaginationItem>
       <PaginationItem>
         <PaginationLink
           onClick={paginationCLick}
-          value={page * 1}
-          dangerouslySetInnerHTML={{ __html: page * 1 }}
+          value={1 + pagePoint}
+          dangerouslySetInnerHTML={{ __html: 1 + pagePoint }}
         ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
-        <PaginationLink onClick={paginationCLick} value='2'>
-          2
-        </PaginationLink>
+        <PaginationLink
+          onClick={paginationCLick}
+          value={2 + pagePoint}
+          dangerouslySetInnerHTML={{ __html: 2 + pagePoint }}
+        ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
-        <PaginationLink onClick={paginationCLick} value='3'>
-          3
-        </PaginationLink>
+        <PaginationLink
+          onClick={paginationCLick}
+          value={3 + pagePoint}
+          dangerouslySetInnerHTML={{ __html: 3 + pagePoint }}
+        ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
-        <PaginationLink onClick={paginationCLick} value='4'>
-          4
-        </PaginationLink>
+        <PaginationLink
+          onClick={paginationCLick}
+          value={4 + pagePoint}
+          dangerouslySetInnerHTML={{ __html: 4 + pagePoint }}
+        ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
-        <PaginationLink onClick={paginationCLick} value='5'>
-          5
-        </PaginationLink>
+        <PaginationLink
+          onClick={paginationCLick}
+          value={5 + pagePoint}
+          dangerouslySetInnerHTML={{ __html: 5 + pagePoint }}
+        ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
-        <PaginationLink href='#' next />
+        <PaginationLink next onClick={clickNextPage} />
       </PaginationItem>
       <PaginationItem>
         <PaginationLink href='#' last />
