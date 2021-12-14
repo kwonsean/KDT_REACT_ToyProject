@@ -8,8 +8,8 @@ export default function ShoppingList({
   setSearchList,
   searchList,
   selectedText,
+  totalResults,
 }) {
-  console.log('this is sp', searchList)
   // 구매 버튼 클릭시 그 상품에 대한 정보 객체 매개변수로 받음
   const clickBuyBtn = (item) => {
     axios
@@ -68,6 +68,7 @@ export default function ShoppingList({
         <PaginationComponent
           selectedText={selectedText}
           setSearchList={setSearchList}
+          totalResults={totalResults}
         />
       )}
     </div>

@@ -8,6 +8,7 @@ export default function SearchBar({
   searchList,
   selectedText,
   setSelectedText,
+  setTotalResults,
 }) {
   const [data, setData] = useState([])
   const [text, setText] = useState('')
@@ -62,7 +63,8 @@ export default function SearchBar({
         const { itemList, total } = response.data
         setSearchList(itemList)
         setIsSearched(true)
-        console.log(total)
+        setTotalResults(total)
+        // console.log(total)
       })
       .catch((error) => {
         console.log(error)
