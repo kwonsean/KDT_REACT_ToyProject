@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { PaginationItem, PaginationLink, Pagination } from 'reactstrap'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default function PaginationComponent({
   selectedText,
@@ -34,7 +35,7 @@ export default function PaginationComponent({
   const clickNextPage = () => {
     setPagePoint((cur) => {
       if (cur + 5 > totalEndPage || cur + 5 > 95) {
-        alert('더 이상 상품 페이지가 없습니다.')
+        sweetAlert()
         return cur
       } else {
         return cur + 5
@@ -75,8 +76,15 @@ export default function PaginationComponent({
   const paginationNumberCLick = (e) => {
     const value = e.target.value
     // console.log(e.target)
-    if (value > totalEndPage + 1) {
-      alert('더 이상 상품 페이지가 없습니다!')
+
+    // 전체 상품 결과가 10의 배수로 딱 나누어 떨어지는 경우에는 totalEndPage + 1을 하면 상품이 없는 페이지가 선택이 됨
+    // 반면 10의  배수로 나누어 떨어지지 않는 경우에는 마지막페이지가 선택이 되지 않기 때문에 +1을 해서 해결을 해줘야 함
+    // 이 두 문제를 해결하기 위해 아래와 같은 if문을 사용
+    if (totalResults % 10 === 0 && value > totalEndPage) {
+      sweetAlert()
+      return
+    } else if (totalResults % 10 !== 0 && value > totalEndPage + 1) {
+      sweetAlert()
       return
     }
     axios
@@ -147,4 +155,14 @@ export default function PaginationComponent({
       </PaginationItem>
     </Pagination>
   )
+}
+
+const sweetAlert = () => {
+  Swal.fire({
+    position: 'top',
+    icon: 'info',
+    title: '더이상 상품 페이지가 없습니다!',
+    showConfirmButton: false,
+    timer: 1500,
+  })
 }
