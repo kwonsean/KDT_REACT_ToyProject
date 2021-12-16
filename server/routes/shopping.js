@@ -48,7 +48,7 @@ router.post('/', (req, res, next) => {
     var api_url =
       'https://openapi.naver.com/v1/search/shop.json?query=' +
       encodeURI(selectedText) +
-      `&start=${10 * page}`
+      `&start=${10 * page - 10 === 0 ? 1 : 10 * page - 9}` // 이전 코드는 10이 기본값으로 들어가게 되어 1 ~ 9번은 무시되는 문제가 있어 이를 해결함
     // console.log(api_url)
 
     const request = require('request')
