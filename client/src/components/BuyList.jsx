@@ -3,7 +3,7 @@ import { Col, Row } from 'reactstrap'
 import styled from './ShoppingList.module.css'
 
 export default function BuyList({ item, index }) {
-  const { title, image, buyCount } = item
+  const { title, image, buyCount, insertDate } = item
   const htmlTitle = title
   return (
     <div>
@@ -12,13 +12,15 @@ export default function BuyList({ item, index }) {
         <Col xs='1'>
           <img alt='item' src={image} width='100%' />
         </Col>
-        <Col xs='8'>
+        <Col xs='6'>
           <h5
             dangerouslySetInnerHTML={{ __html: htmlTitle }}
             className={styled.title}
           ></h5>
         </Col>
-
+        <Col xs='2'>
+          <span>{insertDate.slice(2, 10)}</span>
+        </Col>
         <Col xs='2'>
           <span>{buyCount} 건</span>
         </Col>
