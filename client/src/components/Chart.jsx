@@ -130,12 +130,35 @@ export default function Chart() {
   )
 
   const [itemDetail, setItemDetail] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [orderMode, setOrderMode] = useState('DESC')
 
   const onClickPie = (e) => {
-    const name = e.name
+    const category = e.name
+    setSelectedCategory(category)
     axios
       .post('/shopping?type=selectCategoryDetail', {
-        name,
+        category,
+      })
+      .then((response) => {
+        const { data } = response.data
+        console.log(data)
+        setItemDetail(data)
+      })
+      .catch((error) => console.log(error))
+  }
+
+  const clickDate = (e) => {
+    console.log('e', e.target.id.split(','))
+    const [order, mode] = e.target.id.split(',')
+    mode === 'DESC' ? setOrderMode('') : setOrderMode('DESC')
+    console.log(order, mode)
+    console.log(selectedCategory)
+    axios
+      .post('/shopping?type=orderDate', {
+        category: selectedCategory,
+        order,
+        mode,
       })
       .then((response) => {
         const { data } = response.data
@@ -172,9 +195,13 @@ export default function Chart() {
           <Row className={styled.rowTitle}>
             <Col xs='1'>순번</Col>
             <Col xs='1'>이미지</Col>
-            <Col xs='8'>상품 명</Col>
-
-            <Col xs='2'>구매 건수</Col>
+            <Col xs='6'>상품 명</Col>
+            <Col xs='2' onClick={clickDate} id={['insertDate', orderMode]}>
+              구매 일자
+            </Col>
+            <Col xs='2' onClick={clickDate} id={['buyCount', orderMode]}>
+              구매 건수
+            </Col>
           </Row>
           {itemDetail.map((item, index) => (
             <BuyList item={item} key={item.productId} index={index} />
