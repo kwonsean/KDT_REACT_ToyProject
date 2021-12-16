@@ -43,7 +43,8 @@
 
 ### 구매 통계 차트
 
-> 구매한 data를 받아와 recharts 라이브러리를 통해 총 구매 통계 차트 구현
+> 구매한 data를 받아와 recharts 라이브러리를 통해 총 구매 통계 차트 구현  
+> 차트 클릭시 카테고리별 상세 구매내역 조회 기능 구현
 
 ![chart](https://user-images.githubusercontent.com/60686984/146392854-3fc260c5-828d-43d9-800e-4c9238e74e81.gif)
 
