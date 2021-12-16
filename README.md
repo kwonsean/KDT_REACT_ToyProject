@@ -1,150 +1,84 @@
 # 검색어 자동완성 및 판매 내역 관리 보고서
 
-- 과제 기간: 12월 06일(월) ~ 12월 13일(월)
+## 구현사항
 
-## 요구사항
+- 네이버 API를 이용한 검색어 자동완성 기능
+- 네이버 API를 이용한 상품 조회 기능
+- 네이버 API를 이용한 페이지 이동 기능
+- 서버 통신을 통한 구매목록 추가, 조회, 업데이트, 정렬 기능
+- recharts를 이용한 통계 차트
+- sweetalert2를 이용한 알림
 
-### 필수 요구사항
+## 세부 구현 내용
 
-- [x] Naver API 실제 호출은 Server에 적용 합니다.(3점)
-  - routes/shopping.js에서 호출합니다.
-- [x] Naver API 검색어 연관 내용이 적절히 표현 되며 Click 되어야 합니다.(3점)
-- [x] Naver API 상품 조회 API를 이용해 상품 목록 조회 합니다. (3점)
-- [x] 구매 버튼을 이용해서 조회된 상품을 구매합니다.(3점)
-- [x] 구매 내역을 차트를 이용해 표현 및 상세 내용을 나타냅니다.(3점)
+### 검색어 자동완성 기능
 
-### 선택 요구사항
+> 입력값에 따라 검색어를 자동완성하여 최대 10개의 자동완성된 단어를 보여주며 이를 클릭 또는 검색 버튼 클릭 시 그 단어에 맞는 상품이 조회됨
 
-- [x] Naver API KEY 와 Secret 키는 중요 정보로 별도 관리합니다.(4점)
-  - 로컬 환경 config폴더에서 관리하고 있습니다.
-- [x] Component를 하나로 만들지말고 분리해서 만들어 보세요. (3점)
-- [x] Component는 Function 방식으로 개발. (2점)
-- [x] Material UI 또는 **reactstrap** 등을 이용하세요.(2점)
-- [x] 상품 등록, 통계, 상품 조회 쿼리를 직접 작성해보세요.(1점)
-- [x] 통계 화면에 검색어 조건(날짜)를 넣어보세요.(1점)
-- [ ] Server가 왜 필요한지 조사해 보세요.(1점)
+![Search](https://user-images.githubusercontent.com/60686984/146388177-c7fde7a9-a71b-4f89-b29f-87860c1c2264.gif)
 
-### TODO
+<br />
 
-- [x] 페이지 이동 기능 구현
-  - 마지막 페이지 이동 제외하고 구현
-- [x] 구매시 sweetalert2 적용
-- [x] 통계 화면 검색어 조건 구현
-  - 구매일자, 구매 건수 클릭시 내림차순, 오름차순 순서로 정렬
+### 페이지 이동 기능
 
-## API 사용법
+1. 숫자버튼 페이지 이동
+   > 기본 5 페이지로 구성 되어 있고 숫자 버튼 클릭 시 그에 맞는 상품리스트가 조회되도록 구현  
+   > 차트 클릭시 카테고리별 구매내역이 조회되도록 구현
 
-- 참고 사이트: [Naver 개발자 포럼](https://developers.naver.com/main/)
-- 개인마다 회원 가입
-- application 등록
-- Naver Key, Secret Key 발급
+![pagination](https://user-images.githubusercontent.com/60686984/146389055-874b2a87-1032-43ca-9204-11d04cc075e9.gif)
 
-### 1. 검색어 자동 완성 Naver API
+2. 화살표버튼 페이지 이동
+   > \>, \< 버튼 클릭시 다음 5페이지로 이동하며 \>>, \<< 버튼 클릭시 가장 끝 페이지로 이동하도록 구현  
+   > 현재 \>>버튼은 마지막페이지가 아닌 마지막페이지가 포함된 5개의 숫자 중 가장 첫번째 숫자 페이지로 이동함 추후 수정할 예정
 
-요청 예시:
+![arrowPage](https://user-images.githubusercontent.com/60686984/146391034-14c55344-d125-4a7e-ad0e-1d7045257a2a.gif)
 
-```url
-'https://mac.search.naver.com/mobile/ac?_q_enc=UTF-8&st=1&frm=mobile_nv&r_format=json&r_enc=UTF-8&r_unicode=0&t_koreng=1&ans=1&run=2&rev=4&q='+encodeURI(연관검색어)
-```
+3. 마지막 페이지
+   > API를 이용하여 호출 가능한 최대 페이지 수는 100페이지 이다. 따라서 전체 결과가 100 \* 10 개 보다 많을 경우 100페이지까지 표현하며 전체 결과가 더 적을 경우에는 조회된 전체 결과를 보여주며 이때 전체 결과를 초과하는 페이지 클릭시 알림창이 나오도록 구현  
+   > 아래 예시처럼 깃허브의 마지막페이지는 49페이지로 그 이후 페이지를 클릭하게되면 알림창이 나오도록 구현
 
-응답 예시:
+![lastPage](https://user-images.githubusercontent.com/60686984/146392280-7c307dd1-29a8-4b09-9ce0-6b011d07a9fb.gif)
 
-```json
-{
-  "query": [
-    "플스5"
-  ],
-  "answer": [],
-  "intend": [],
-  "items": [
-    [
-      [
-        "플스5 사전예약",
-        "0"
-      ],
-      [
-        "플스5",
-        "0"
-      ],
-      [
-        "플스5 사전예약 11월",
-        "0"
-      ],
-      [
-        "플스5 게임",
-        "0"
-      ],
-      ....
-    ]
-  ]
-}
-```
+<br />
 
-### 2. 상품 목록 조회 API
+### 구매 통계 차트
 
-| 메소드 | 요청 URL                                      | 출력 포맷 |
-| ------ | --------------------------------------------- | --------- |
-| `GET`  | https://openapi.naver.com/v1/search/shop.json | JSON      |
+> 구매한 data를 받아와 recharts 라이브러리를 통해 총 구매 통계 차트 구현
 
-| 요청 변수 | 타입    | 필수여부 | 기본값                      | 설명                                                                           |
-| --------- | ------- | -------- | --------------------------- | ------------------------------------------------------------------------------ |
-| query     | string  | Y        | -                           | 검색을 원하는 문자열로서 UTF-8로 인코딩한다.                                   |
-| display   | integer | N        | 10(기본값), 100(최대)       | 검색 결과 출력 건수 지정                                                       |
-| start     | integer | N        | 1(기본값), 1000(최대)       | 검색 시작 위치로 최대 1000까지 가능                                            |
-| sort      | string  | N        | sim(기본값), date, asc, dsc | 정렬 옵션: sim (유사도순), date (날짜순), asc(가격오름차순) ,dsc(가격내림차순) |
+![chart](https://user-images.githubusercontent.com/60686984/146392854-3fc260c5-828d-43d9-800e-4c9238e74e81.gif)
 
-요청 예시:
+<br />
 
-```url
-'https://openapi.naver.com/v1/search/shop.json?query=' + encodeURI(req.body.query);
-```
+### 상품 구매
 
-응답 예시:
+> 상품 구매는 구매버튼 클릭시 sweetalert2를 이용하여 구매 확인을 하며 취소시 아무일도 일어나지 않고 구매 시 상품 이미지와 상품명을 보여주며 구매완료를 나타냄
 
-- `Search`: 영화 목록, 1페이지(`page`) 당 최대 10개
-- `totalResults`: 검색 가능한 모든 영화 개수
+![buy](https://user-images.githubusercontent.com/60686984/146393815-d73b1321-cd84-4514-9243-7ac2eba7993e.gif)
 
-```json
-{
-  "lastBuildDate": "Sun, 05 Dec 2021 11:23:59 +0900",
-  "total": 62722,
-  "start": 1,
-  "display": 10,
-  "items": [
-    {
-      "title": "제목",
-      "link": "https://search.shopping.naver.com/....",
-      "image": "https://shopping-.......jpg",
-      "lprice": "가격",
-      "hprice": "",
-      "mallName": "네이버",
-      "productId": "12345612",
-      "productType": "1",
-      "brand": "",
-      "maker": "SIE",
-      "category1": "디지털/가전",
-      "category2": "게임기/타이틀",
-      "category3": "가정용게임기",
-      "category4": ""
-    },
-    {
-      "title": "플레이역5",
-      "link": "https://search.shopping.naver.com/...",
-      "image": "https://shopping-.....jpg",
-      "lprice": "12345",
-      "hprice": "",
-      "mallName": "네이버",
-      "productId": "123456789",
-      "productType": "1",
-      "brand": "SIE",
-      "maker": "SIE",
-      "category1": "디지털/가전",
-      "category2": "게임기/타이틀",
-      "category3": "가정용게임기",
-      "category4": ""
-    }
-  ]
-}
-```
+> 상품 구매시 처음 구매하는 상품은 새롭게 등록이 되며 이미 구매한 상품은 구매 건수가 1씩 증가한다.
 
-### 3. 차트, 상품 등록 조회 Table 정보는 PDF로 제공합니다.
+![new](https://user-images.githubusercontent.com/60686984/146395315-42bd692b-cf73-4836-925c-b57a55443559.gif)
+
+![update](https://user-images.githubusercontent.com/60686984/146395226-678d7688-73bc-40ac-905d-70b18df36b55.gif)
+
+<br />
+
+### 구매 목록 정렬
+
+1. 구매 일자별 정렬
+   > 구매 일자 타이틀 클릭시 내림차순, 오름차순 순으로 정렬되도록 구현
+
+![order](https://user-images.githubusercontent.com/60686984/146395961-b8fa6e26-3880-4260-961a-409c7f52c46e.gif)
+
+2. 구매 건수별 정렬
+   > 구매 건수 타이틀 클릭시 내림차순, 오름차순 순으로 정렬되도록 구현
+
+![orderCount](https://user-images.githubusercontent.com/60686984/146396608-14accc9e-6281-4430-9eed-88674a3b739a.gif)
+
+<br />
+
+## TODO
+
+- redux같은 상태관리 도구 도입하여 리팩토링
+- \>>버튼 제대로 구현되도록 수정
+- 기존 강사님 DB 서버에서 내 DB 서버로 연결
