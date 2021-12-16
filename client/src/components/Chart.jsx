@@ -116,6 +116,9 @@ export default function Chart() {
     '#E0C5AD',
     '#F6E785',
     '#F59E90',
+    '#9FDEF5',
+    '#8C32F0',
+    '#FAF27F',
   ]
   const [activeIndex, setActiveIndex] = useState(0)
 
