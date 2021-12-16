@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Container } from 'reactstrap'
 import Chart from './components/Chart'
+// import MapTest from './components/MapTest'
 import NavBar from './components/NavBar'
 import SearchBar from './components/SearchBar'
 import ShoppingList from './components/ShoppingList'
@@ -32,6 +33,7 @@ function App() {
       ) : (
         <Chart />
       )}
+      {/* <MapTest /> */}
     </Container>
   )
 }
