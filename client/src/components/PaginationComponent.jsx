@@ -7,24 +7,56 @@ export default function PaginationComponent({
   setSearchList,
   totalResults,
 }) {
-  // TODO 마지막 페이지 계산 및 표현, 끝페이지 이동 처리, 끞페이지시 next버튼 비활성화
+  // TODO 마지막페이지 이동시 진짜 마지막 페이지가 아닌 마지막 페이지가 포함된 가장큰 5의배수 + 1 페이지로 이동함 (ex. totalEndPage 27 => lastPage이동시 26page로 감)
+  // 생각나는 해결책 : totalEndPage의 5를 나눈값에 나머지 값을 더해서 API 호출 (함수를 하나 더?)
 
-  const endPage = Math.ceil(totalResults / 10)
-  // console.log('endpage', endPage)
-  const [page, setPage] = useState(1)
+  const totalEndPage = Math.floor(totalResults / 10)
+  // console.log('totalEndPage', totalEndPage)
+
+  // 가능한 마지막 요소 조회가 1000까지라 이 이상 넘어가면 막아줘야함
+  let possibleEndPagePoint = parseInt(totalEndPage / 5) * 5
+  possibleEndPagePoint = possibleEndPagePoint > 100 ? 95 : possibleEndPagePoint
+
   const [pagePoint, setPagePoint] = useState(0)
 
   const clickFirstPage = () => {
+    if (pagePoint === 0) {
+      jumpPage()
+      return
+    }
     setPagePoint(0)
   }
+
   const clickPrevPage = () => {
     setPagePoint((cur) => cur - 5)
   }
+
   const clickNextPage = () => {
-    setPagePoint((cur) => cur + 5)
+    setPagePoint((cur) => {
+      if (cur + 5 > totalEndPage || cur + 5 > 95) {
+        alert('더 이상 상품 페이지가 없습니다.')
+        return cur
+      } else {
+        return cur + 5
+      }
+    })
+  }
+
+  const clickLastPage = () => {
+    setPagePoint(possibleEndPagePoint)
   }
 
   useEffect(() => {
+    setPagePoint(0)
+  }, [selectedText])
+
+  useEffect(() => {
+    jumpPage()
+  }, [pagePoint])
+
+  // pagePoint가 변하는 경우 실행되는 함수 (숫자의외의 버튼 클릭시 동작)
+  const jumpPage = () => {
+    // console.log('movePage!!')
     axios
       .post('/shopping?type=chose', {
         selectedText: selectedText,
@@ -37,11 +69,16 @@ export default function PaginationComponent({
       .catch((error) => {
         console.log(error)
       })
-  }, [pagePoint])
+  }
 
-  const paginationCLick = (e) => {
+  // 숫자 pagination을 클릭시 그 버튼이 가지고 있는 value값으로 검색
+  const paginationNumberCLick = (e) => {
     const value = e.target.value
-    console.log(e.target)
+    // console.log(e.target)
+    if (value > totalEndPage + 1) {
+      alert('더 이상 상품 페이지가 없습니다!')
+      return
+    }
     axios
       .post('/shopping?type=chose', {
         selectedText: selectedText,
@@ -58,11 +95,7 @@ export default function PaginationComponent({
   return (
     <Pagination style={{ width: 300, margin: '0 auto 40px' }}>
       <PaginationItem>
-        <PaginationLink
-          first
-          onClick={clickFirstPage}
-          disabled={pagePoint === 0 ? true : false}
-        />
+        <PaginationLink first onClick={clickFirstPage} />
       </PaginationItem>
       <PaginationItem>
         <PaginationLink
@@ -73,35 +106,35 @@ export default function PaginationComponent({
       </PaginationItem>
       <PaginationItem>
         <PaginationLink
-          onClick={paginationCLick}
+          onClick={paginationNumberCLick}
           value={1 + pagePoint}
           dangerouslySetInnerHTML={{ __html: 1 + pagePoint }}
         ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
         <PaginationLink
-          onClick={paginationCLick}
+          onClick={paginationNumberCLick}
           value={2 + pagePoint}
           dangerouslySetInnerHTML={{ __html: 2 + pagePoint }}
         ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
         <PaginationLink
-          onClick={paginationCLick}
+          onClick={paginationNumberCLick}
           value={3 + pagePoint}
           dangerouslySetInnerHTML={{ __html: 3 + pagePoint }}
         ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
         <PaginationLink
-          onClick={paginationCLick}
+          onClick={paginationNumberCLick}
           value={4 + pagePoint}
           dangerouslySetInnerHTML={{ __html: 4 + pagePoint }}
         ></PaginationLink>
       </PaginationItem>
       <PaginationItem>
         <PaginationLink
-          onClick={paginationCLick}
+          onClick={paginationNumberCLick}
           value={5 + pagePoint}
           dangerouslySetInnerHTML={{ __html: 5 + pagePoint }}
         ></PaginationLink>
@@ -110,7 +143,7 @@ export default function PaginationComponent({
         <PaginationLink next onClick={clickNextPage} />
       </PaginationItem>
       <PaginationItem>
-        <PaginationLink href='#' last />
+        <PaginationLink last onClick={clickLastPage} />
       </PaginationItem>
     </Pagination>
   )
