@@ -15,7 +15,14 @@
   <select id="selectCategoryDetail">
     SELECT *
     FROM react.product_naver
-    WHERE category1 = #{name}
+    WHERE category1 = #{category}
+  </select>
+
+  <select id="orderDate">
+    SELECT *
+    FROM react.product_naver
+    WHERE category1 = #{category}
+    order by ${order} ${mode}
   </select>
 
   <insert id='buyItem'>

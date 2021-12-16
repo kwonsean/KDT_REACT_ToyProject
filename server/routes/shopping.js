@@ -106,6 +106,16 @@ router.post('/', (req, res, next) => {
 
     router.use('/', dbconnect_Module)
     next('route')
+  } else if ('orderDate' === type) {
+    const dbconnect_Module = require('./dbconnect_module')
+
+    // mybaits
+    req.body.mapper = 'NaverShoppingMapper' // 파일명 정의
+    req.body.crud = 'select' // select, insert, update, delete 중 하나 작성
+    req.body.mapper_id = 'orderDate'
+
+    router.use('/', dbconnect_Module)
+    next('route')
   } else if ('buyItem' === type) {
     const item = req.body.item
     console.log('this is item!!!', item)
