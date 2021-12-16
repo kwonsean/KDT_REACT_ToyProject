@@ -3,6 +3,7 @@ import { Button, Col, Row } from 'reactstrap'
 import styled from './ShoppingList.module.css'
 import axios from 'axios'
 import PaginationComponent from './PaginationComponent'
+import Swal from 'sweetalert2'
 
 export default function ShoppingList({
   setSearchList,
@@ -12,16 +13,39 @@ export default function ShoppingList({
 }) {
   // 구매 버튼 클릭시 그 상품에 대한 정보 객체 매개변수로 받음
   const clickBuyBtn = (item) => {
-    axios
-      .post(`/shopping?type=buyItem`, {
-        item,
-      })
-      .then((response) => {
-        alert('구매를 완료했습니다!')
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    Swal.fire({
+      title: '상품을 구매하시겠습니까?',
+      text: `상품 가격은 ${item.lprice.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ','
+      )}원 입니다.`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '구매',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `${item.title}을 구매하였습니다.`,
+          imageUrl: `${item.image}`,
+          imageWidth: 400,
+          imageHeight: 400,
+          imageAlt: '상품 이미지',
+          confirmButtonText: '확인',
+        })
+        axios
+          .post(`/shopping?type=buyItem`, {
+            item,
+          })
+          .then((response) => {})
+          .catch((error) => {
+            console.log(error)
+            alert('구매에 실패했습니다!')
+          })
+      }
+    })
   }
 
   return (
